@@ -24,9 +24,6 @@
 
 ::home-promo::
 
-## 参加を検討している方へ
+## 協賛
 
-- [参加申し込み](registration.html)
-- [一般講演](general.html)
-- [スケジュール](schedule.html)
-- [会場・アクセス](access.html)
+気象夏の学校の趣旨に賛同し、ご支援いただける企業・団体を募集しています。協賛の詳細や掲載情報は [協賛ページ](sponsors.html) をご確認ください。
