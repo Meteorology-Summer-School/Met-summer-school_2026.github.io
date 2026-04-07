@@ -478,7 +478,7 @@
   }
 
   function buildHero() {
-    return '<section class="hero" id="home-hero"><div class="hero__overlay"><div class="hero__content hero__content--plain"><p class="hero__eyebrow" id="hero-eyebrow">Meteorological Summer School</p><h1 id="hero-title">' +
+    return '<section class="hero" id="home-hero"><div class="hero__image-layer" id="hero-image-layer"></div><div class="hero__overlay"><div class="hero__content hero__content--plain"><p class="hero__eyebrow" id="hero-eyebrow">Meteorological Summer School</p><h1 id="hero-title">' +
       escapeHtml(SITE.title) +
       '</h1></div></div></section>';
   }
@@ -488,7 +488,8 @@
     const homeIntro = page.hero
       ? '<div class="content-wrap content-wrap--hero-follow"><section class="content-card content-card--home-intro"><div class="home-intro__lead" id="hero-lead"></div><div class="hero__meta hero__meta--below" id="hero-meta"></div></section></div>'
       : "";
-    return '<div class="site-shell"><header class="site-header"><div class="site-header__inner"><a class="site-brand" href="index.html"><span class="site-brand__eyebrow">' + escapeHtml(SITE.subtitle) + '</span><span class="site-brand__title">' + escapeHtml(SITE.title) + '</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">メニュー</button></div>' + buildNav(page) + '</header><main class="site-main">' + (page.hero ? buildHero() : "") + homeIntro + '<div class="content-wrap"><article class="content-card' + (page.hero ? " content-card--home" : "") + '">' + heading + '<div class="page-content" id="page-content"></div></article></div></main><footer class="site-footer"><div class="site-footer__inner"><p>' + escapeHtml(SITE.title) + '</p><p>このサイトは GitHub Pages の静的配信のみで動作します。</p></div></footer></div>';
+    return '<div class="site-shell"><header class="site-header"><div class="site-header__inner"><a class="site-brand" href="index.html"><span class="site-brand__eyebrow">' + escapeHtml(SITE.subtitle) + '</span><span class="site-brand__title">' + escapeHtml(SITE.title) + '</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">メニュー</button>' + buildNav(page) + '</div></header><main class="site-main' + (page.hero ? " site-main--home" : "") + '">' + (page.hero ? buildHero() : "") + homeIntro + '<div class="content-wrap"><article class="content-card' + (page.hero ? " content-card--home" : "") + '">' + heading + '<div class="page-content" id="page-content"></div></article></div></main><footer class="site-footer"><div class="site-footer__inner"><p>' + escapeHtml(SITE.title) + '</p><p>このサイトは GitHub Pages の静的配信のみで動作します。</p></div></footer></div>';
+
   }
 
   async function renderHeroMeta() {
@@ -499,15 +500,14 @@
       return;
     }
     const hero = document.getElementById("home-hero");
+    const heroImageLayer = document.getElementById("hero-image-layer");
     const eyebrow = document.getElementById("hero-eyebrow");
     const title = document.getElementById("hero-title");
     const lead = document.getElementById("hero-lead");
 
-    if (heroSettings.background_image && hero) {
-      hero.style.backgroundImage =
-        "linear-gradient(180deg, rgba(7, 28, 45, 0.18), rgba(7, 28, 45, 0.58)), url('" +
-        heroSettings.background_image.replace(/'/g, "%27") +
-        "')";
+    if (heroSettings.background_image && heroImageLayer) {
+      heroImageLayer.style.backgroundImage =
+        "url('" + heroSettings.background_image.replace(/'/g, "%27") + "')";
     }
     if (heroSettings.eyebrow && eyebrow) {
       eyebrow.textContent = heroSettings.eyebrow;
@@ -549,6 +549,22 @@
     });
   }
 
+  function syncHeaderHeight() {
+    const header = document.querySelector(".site-header");
+    if (!header) {
+      return;
+    }
+    document.documentElement.style.setProperty("--header-height", header.offsetHeight + "px");
+  }
+
+  function syncHeaderTopState() {
+    const header = document.querySelector(".site-header");
+    if (!header) {
+      return;
+    }
+    header.classList.toggle("is-top", window.scrollY <= 4);
+  }
+
   async function bootstrap() {
     const pageKey = document.body.dataset.page || "home";
     const page = PAGES[pageKey] || PAGES.home;
@@ -557,6 +573,10 @@
     const root = document.getElementById("site-root");
     root.innerHTML = buildShell(page);
     bindNav();
+    syncHeaderHeight();
+    syncHeaderTopState();
+    window.addEventListener("resize", syncHeaderHeight);
+    window.addEventListener("scroll", syncHeaderTopState, { passive: true });
 
     try {
       if (page.hero) {
