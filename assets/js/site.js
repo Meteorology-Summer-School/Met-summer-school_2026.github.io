@@ -553,12 +553,15 @@
       '</h1></div></div></section>';
   }
 
-  function buildShell(page) {
+  function buildShell(page, brandSettings) {
     const heading = page.hero ? "" : '<header class="page-heading"><p class="page-heading__eyebrow">' + escapeHtml(SITE.title) + '</p><h1>' + escapeHtml(page.title) + "</h1>" + (page.lead ? '<p class="page-heading__lead">' + escapeHtml(page.lead) + "</p>" : "") + "</header>";
     const homeIntro = page.hero
       ? '<div class="content-wrap content-wrap--hero-follow"><section class="content-card content-card--home-intro"><div class="home-intro__lead" id="hero-lead"></div><div class="hero__meta hero__meta--below" id="hero-meta"></div></section></div>'
       : "";
-    return '<div class="site-shell"><header class="site-header"><div class="site-header__inner"><a class="site-brand" href="index.html"><span class="site-brand__eyebrow">' + escapeHtml(SITE.subtitle) + '</span><span class="site-brand__title">' + escapeHtml(SITE.title) + '</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">メニュー</button>' + buildNav(page) + '</div></header><main class="site-main' + (page.hero ? " site-main--home" : "") + '">' + (page.hero ? buildHero() : "") + homeIntro + '<div class="content-wrap"><article class="content-card' + (page.hero ? " content-card--home" : "") + '">' + heading + '<div class="page-content" id="page-content"></div></article></div></main><footer class="site-footer"><div class="site-footer__inner"><p>' + escapeHtml(SITE.title) + '</p><p>このサイトは GitHub Pages の静的配信のみで動作します。</p></div></footer></div>';
+    const logoImage = brandSettings.logo_image || "assets/images/site-icon-placeholder.svg";
+    const logoAlt = brandSettings.logo_alt || SITE.title;
+    const logo = '<span class="site-brand__logo-wrap"><img class="site-brand__logo" src="' + escapeHtml(logoImage) + '" alt="' + escapeHtml(logoAlt) + '"></span>';
+    return '<div class="site-shell"><header class="site-header"><div class="site-header__inner"><a class="site-brand" href="index.html">' + logo + '<span class="site-brand__text"><span class="site-brand__eyebrow">' + escapeHtml(SITE.subtitle) + '</span><span class="site-brand__title">' + escapeHtml(SITE.title) + '</span></span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">メニュー</button>' + buildNav(page) + '</div></header><main class="site-main' + (page.hero ? " site-main--home" : "") + '">' + (page.hero ? buildHero() : "") + homeIntro + '<div class="content-wrap"><article class="content-card' + (page.hero ? " content-card--home" : "") + '">' + heading + '<div class="page-content" id="page-content"></div></article></div></main><footer class="site-footer"><div class="site-footer__inner"><p>' + escapeHtml(SITE.title) + '</p><p>このサイトは GitHub Pages の静的配信のみで動作します。</p></div></footer></div>';
 
   }
 
@@ -635,13 +638,66 @@
     header.classList.toggle("is-top", window.scrollY <= 4);
   }
 
+  function enhanceHomeChairSection(page) {
+    if (!page.hero) {
+      return;
+    }
+
+    const content = document.getElementById("page-content");
+    if (!content) {
+      return;
+    }
+
+    const headings = Array.from(content.querySelectorAll("h2"));
+    const chairHeading = headings.find(function (heading) {
+      return heading.textContent.trim() === "校長挨拶";
+    });
+
+    if (!chairHeading) {
+      return;
+    }
+
+    const section = document.createElement("section");
+    section.className = "home-chair";
+
+    const media = document.createElement("div");
+    media.className = "home-chair__media";
+
+    const body = document.createElement("div");
+    body.className = "home-chair__body";
+
+    let current = chairHeading.nextElementSibling;
+    while (
+      current &&
+      current.tagName !== "H2" &&
+      !current.classList.contains("home-promo")
+    ) {
+      const next = current.nextElementSibling;
+      if (current.classList.contains("markdown-image")) {
+        media.appendChild(current);
+      } else {
+        body.appendChild(current);
+      }
+      current = next;
+    }
+
+    if (!media.children.length && !body.children.length) {
+      return;
+    }
+
+    section.appendChild(media);
+    section.appendChild(body);
+    chairHeading.insertAdjacentElement("afterend", section);
+  }
+
   async function bootstrap() {
     const pageKey = document.body.dataset.page || "home";
     const page = PAGES[pageKey] || PAGES.home;
     document.title = page.title + " | " + SITE.title;
+    const brandSettings = csvRowsToMap(await fetchCsv("data/site_brand.csv"));
 
     const root = document.getElementById("site-root");
-    root.innerHTML = buildShell(page);
+    root.innerHTML = buildShell(page, brandSettings);
     bindNav();
     syncHeaderHeight();
     syncHeaderTopState();
@@ -654,6 +710,7 @@
       }
       const markdown = await fetchText(page.content);
       document.getElementById("page-content").innerHTML = await renderMarkdown(markdown);
+      enhanceHomeChairSection(page);
     } catch (error) {
       document.getElementById("page-content").innerHTML = '<p class="fetch-error">' + escapeHtml(error.message) + "</p>";
     }
