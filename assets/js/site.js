@@ -539,11 +539,14 @@
       const isActive = page.navRoot === item.id || page.id === item.id;
       const hasChildren = Array.isArray(item.children) && item.children.length > 0;
       const submenu = hasChildren
-        ? '<button class="site-nav__subtoggle" type="button" aria-expanded="false" aria-label="' + escapeHtml(item.label) + ' の子ページを開く">+</button><ul class="site-nav__submenu"><li><a href="' + item.href + '">' + escapeHtml(item.label) + "</a></li>" + item.children.map(function (child) {
+        ? '<ul class="site-nav__submenu"><li><a href="' + item.href + '">' + escapeHtml(item.label) + "</a></li>" + item.children.map(function (child) {
             return '<li><a href="' + child.href + '">' + escapeHtml(child.label) + "</a></li>";
           }).join("") + "</ul>"
         : "";
-      return '<li class="site-nav__item' + (hasChildren ? " site-nav__item--has-children" : "") + (isActive ? " is-active" : "") + '"><a class="site-nav__link" href="' + item.href + '">' + escapeHtml(item.label) + "</a>" + submenu + "</li>";
+      const trigger = hasChildren
+        ? '<button class="site-nav__link site-nav__trigger" type="button" aria-expanded="false" aria-haspopup="true" aria-label="' + escapeHtml(item.label) + ' のメニューを開く">' + escapeHtml(item.label) + "</button>"
+        : '<a class="site-nav__link" href="' + item.href + '">' + escapeHtml(item.label) + "</a>";
+      return '<li class="site-nav__item' + (hasChildren ? " site-nav__item--has-children" : "") + (isActive ? " is-active" : "") + '">' + trigger + submenu + "</li>";
     }).join("") + "</ul></nav>";
   }
 
@@ -574,7 +577,7 @@
     const logoImage = brandSettings.logo_image || "assets/images/site-icon-placeholder.svg";
     const logoAlt = brandSettings.logo_alt || SITE.title;
     const logo = '<span class="site-brand__logo-wrap"><img class="site-brand__logo" src="' + escapeHtml(logoImage) + '" alt="' + escapeHtml(logoAlt) + '"></span>';
-    return '<div class="site-shell">' + buildBanner(bannerSettings) + '<header class="site-header"><div class="site-header__inner"><a class="site-brand" href="index.html">' + logo + '<span class="site-brand__text"><span class="site-brand__eyebrow">' + escapeHtml(SITE.subtitle) + '</span><span class="site-brand__title">' + escapeHtml(SITE.title) + '</span></span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">メニュー</button>' + buildNav(page) + '</div></header><main class="site-main' + (page.hero ? " site-main--home" : "") + '">' + (page.hero ? buildHero() : "") + homeIntro + '<div class="content-wrap"><article class="content-card' + (page.hero ? " content-card--home" : "") + '">' + heading + '<div class="page-content" id="page-content"></div></article></div></main><footer class="site-footer"><div class="site-footer__inner"><p>' + escapeHtml(SITE.title) + '</p><p>このサイトは GitHub Pages の静的配信のみで動作します。</p></div></footer></div>';
+    return '<div class="site-shell">' + buildBanner(bannerSettings) + '<header class="site-header"><div class="site-header__inner"><a class="site-brand" href="index.html">' + logo + '<span class="site-brand__text"><span class="site-brand__eyebrow">' + escapeHtml(SITE.subtitle) + '</span><span class="site-brand__title">' + escapeHtml(SITE.title) + '</span></span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="メニューを開閉"><span class="nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span><span class="nav-toggle__label">メニュー</span></button>' + buildNav(page) + '</div></header><main class="site-main' + (page.hero ? " site-main--home" : "") + '">' + (page.hero ? buildHero() : "") + homeIntro + '<div class="content-wrap"><article class="content-card' + (page.hero ? " content-card--home" : "") + '">' + heading + '<div class="page-content" id="page-content"></div></article></div></main><footer class="site-footer"><div class="site-footer__inner"><p>' + escapeHtml(SITE.title) + '</p><p>このサイトは GitHub Pages の静的配信のみで動作します。</p></div></footer></div>';
 
   }
 
@@ -613,7 +616,7 @@
   function bindNav() {
     const navToggle = document.querySelector(".nav-toggle");
     const siteNav = document.getElementById("site-nav");
-    const subtoggles = document.querySelectorAll(".site-nav__subtoggle");
+    const triggers = document.querySelectorAll(".site-nav__trigger");
 
     if (navToggle && siteNav) {
       navToggle.addEventListener("click", function () {
@@ -623,7 +626,7 @@
       });
     }
 
-    subtoggles.forEach(function (button) {
+    triggers.forEach(function (button) {
       button.addEventListener("click", function () {
         const item = button.closest(".site-nav__item");
         const expanded = button.getAttribute("aria-expanded") === "true";
