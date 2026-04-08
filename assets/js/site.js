@@ -544,10 +544,16 @@
     }).join("") + "</ul></nav>";
   }
 
-  function buildHero() {
-    return '<section class="hero" id="home-hero"><div class="hero__image-layer" id="hero-image-layer"></div><div class="hero__overlay"><div class="hero__content hero__content--plain"><p class="hero__eyebrow" id="hero-eyebrow">Meteorological Summer School</p><h1 id="hero-title">' +
-      escapeHtml(SITE.title) +
-      '</h1></div></div></section>';
+  function buildHero(page) {
+    if (page.hero) {
+      return '<section class="hero" id="home-hero"><div class="hero__image-layer" id="hero-image-layer"></div><div class="hero__overlay"><div class="hero__content hero__content--plain"><p class="hero__eyebrow" id="hero-eyebrow">Meteorological Summer School</p><h1 id="hero-title">' +
+        escapeHtml(SITE.title) +
+        '</h1></div></div></section>';
+    }
+
+    return '<section class="hero hero--subpage"><div class="hero__image-layer" id="hero-image-layer"></div><div class="hero__overlay hero__overlay--subpage"><div class="hero__content hero__content--plain hero__content--subpage"><h1 class="hero__subpage-title">' +
+      escapeHtml(page.title) +
+      "</h1></div></div></section>";
   }
 
   function buildBanner(settings) {
@@ -564,34 +570,46 @@
   }
 
   function buildShell(page, brandSettings, bannerSettings) {
-    const heading = page.hero ? "" : '<header class="page-heading"><p class="page-heading__eyebrow">' + escapeHtml(SITE.title) + '</p><h1>' + escapeHtml(page.title) + "</h1>" + (page.lead ? '<p class="page-heading__lead">' + escapeHtml(page.lead) + "</p>" : "") + "</header>";
     const homeIntro = page.hero
       ? '<div class="content-wrap content-wrap--hero-follow"><section class="content-card content-card--home-intro"><div class="home-intro__lead" id="hero-lead"></div><div class="hero__meta hero__meta--below" id="hero-meta"></div></section></div>'
       : "";
     const logoImage = brandSettings.logo_image || "assets/images/site-icon-placeholder.svg";
     const logoAlt = brandSettings.logo_alt || SITE.title;
     const logo = '<span class="site-brand__logo-wrap"><img class="site-brand__logo" src="' + escapeHtml(logoImage) + '" alt="' + escapeHtml(logoAlt) + '"></span>';
-    return '<div class="site-shell">' + buildBanner(bannerSettings) + '<header class="site-header"><div class="site-header__inner"><a class="site-brand" href="index.html">' + logo + '<span class="site-brand__text"><span class="site-brand__eyebrow">' + escapeHtml(SITE.subtitle) + '</span><span class="site-brand__title">' + escapeHtml(SITE.title) + '</span></span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="メニューを開閉"><span class="nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span><span class="nav-toggle__label">メニュー</span></button>' + buildNav(page) + '</div></header><main class="site-main' + (page.hero ? " site-main--home" : "") + '">' + (page.hero ? buildHero() : "") + homeIntro + '<div class="content-wrap"><article class="content-card' + (page.hero ? " content-card--home" : "") + '">' + heading + '<div class="page-content" id="page-content"></div></article></div></main><footer class="site-footer"><div class="site-footer__inner"><p>' + escapeHtml(SITE.title) + '</p><p>このサイトは GitHub Pages の静的配信のみで動作します。</p></div></footer></div>';
+    return '<div class="site-shell">' + buildBanner(bannerSettings) + '<header class="site-header"><div class="site-header__inner"><a class="site-brand" href="index.html">' + logo + '<span class="site-brand__text"><span class="site-brand__eyebrow">' + escapeHtml(SITE.subtitle) + '</span><span class="site-brand__title">' + escapeHtml(SITE.title) + '</span></span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="メニューを開閉"><span class="nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span><span class="nav-toggle__label">メニュー</span></button>' + buildNav(page) + '</div></header><main class="site-main site-main--hero">' + buildHero(page) + homeIntro + '<div class="content-wrap"><article class="content-card' + (page.hero ? " content-card--home" : "") + '">' + '<div class="page-content" id="page-content"></div></article></div></main><footer class="site-footer"><div class="site-footer__inner"><p>' + escapeHtml(SITE.title) + '</p><p>このサイトは GitHub Pages の静的配信のみで動作します。</p></div></footer></div>';
 
   }
 
-  async function renderHeroMeta() {
-    const rows = await fetchCsv("data/overview.csv");
+  async function renderHeroMeta(page) {
     const heroSettings = csvRowsToMap(await fetchCsv("data/home_hero.csv"));
+    const pageHeroRows = await fetchCsv("data/page_hero_images.csv");
+    const pageHeroMap = {};
+    pageHeroRows.forEach(function (row) {
+      if (row.page) {
+        pageHeroMap[row.page] = row.image || "";
+      }
+    });
+    const heroImageLayer = document.getElementById("hero-image-layer");
+
+    const pageImage = pageHeroMap[page.id] || "";
+    const heroImage = pageImage || heroSettings.background_image || "";
+
+    if (heroImage && heroImageLayer) {
+      heroImageLayer.style.backgroundImage =
+        "url('" + heroImage.replace(/'/g, "%27") + "')";
+    }
+    if (!page.hero) {
+      return;
+    }
+
+    const rows = await fetchCsv("data/overview.csv");
     const target = document.getElementById("hero-meta");
     if (!target) {
       return;
     }
-    const hero = document.getElementById("home-hero");
-    const heroImageLayer = document.getElementById("hero-image-layer");
     const eyebrow = document.getElementById("hero-eyebrow");
     const title = document.getElementById("hero-title");
     const lead = document.getElementById("hero-lead");
-
-    if (heroSettings.background_image && heroImageLayer) {
-      heroImageLayer.style.backgroundImage =
-        "url('" + heroSettings.background_image.replace(/'/g, "%27") + "')";
-    }
     if (heroSettings.eyebrow && eyebrow) {
       eyebrow.textContent = heroSettings.eyebrow;
     }
@@ -723,9 +741,7 @@
     window.addEventListener("scroll", syncHeaderTopState, { passive: true });
 
     try {
-      if (page.hero) {
-        await renderHeroMeta();
-      }
+      await renderHeroMeta(page);
       const markdown = await fetchText(page.content);
       document.getElementById("page-content").innerHTML = await renderMarkdown(markdown);
       enhanceHomeChairSection(page);
