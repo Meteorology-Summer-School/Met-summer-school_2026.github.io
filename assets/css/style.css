@@ -353,6 +353,14 @@ code {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 1400ms ease-in-out, transform 4600ms ease-out;
+}
+
+.hero__image-layer.is-active {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .hero::after {

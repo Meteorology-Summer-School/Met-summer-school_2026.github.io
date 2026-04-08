@@ -95,6 +95,7 @@
 
   const textCache = new Map();
   const csvCache = new Map();
+  let heroSlideshowTimer = null;
 
   function escapeHtml(value) {
     return String(value)
@@ -544,14 +545,18 @@
     }).join("") + "</ul></nav>";
   }
 
+  function buildHeroLayers() {
+    return '<div class="hero__image-layer hero__image-layer--primary is-active" id="hero-image-layer-primary"></div><div class="hero__image-layer hero__image-layer--secondary" id="hero-image-layer-secondary"></div>';
+  }
+
   function buildHero(page) {
     if (page.hero) {
-      return '<section class="hero" id="home-hero"><div class="hero__image-layer" id="hero-image-layer"></div><div class="hero__overlay"><div class="hero__content hero__content--plain"><p class="hero__eyebrow" id="hero-eyebrow">Meteorological Summer School</p><h1 id="hero-title">' +
+      return '<section class="hero" id="home-hero">' + buildHeroLayers() + '<div class="hero__overlay"><div class="hero__content hero__content--plain"><p class="hero__eyebrow" id="hero-eyebrow">Meteorological Summer School</p><h1 id="hero-title">' +
         escapeHtml(SITE.title) +
         '</h1></div></div></section>';
     }
 
-    return '<section class="hero hero--subpage"><div class="hero__image-layer" id="hero-image-layer"></div><div class="hero__overlay hero__overlay--subpage"><div class="hero__content hero__content--plain hero__content--subpage"><h1 class="hero__subpage-title">' +
+    return '<section class="hero hero--subpage">' + buildHeroLayers() + '<div class="hero__overlay hero__overlay--subpage"><div class="hero__content hero__content--plain hero__content--subpage"><h1 class="hero__subpage-title">' +
       escapeHtml(page.title) +
       "</h1></div></div></section>";
   }
@@ -589,14 +594,58 @@
         pageHeroMap[row.page] = row.image || "";
       }
     });
-    const heroImageLayer = document.getElementById("hero-image-layer");
+    const heroImageLayerPrimary = document.getElementById("hero-image-layer-primary");
+    const heroImageLayerSecondary = document.getElementById("hero-image-layer-secondary");
 
     const pageImage = pageHeroMap[page.id] || "";
     const heroImage = pageImage || heroSettings.background_image || "";
 
-    if (heroImage && heroImageLayer) {
-      heroImageLayer.style.backgroundImage =
-        "url('" + heroImage.replace(/'/g, "%27") + "')";
+    if (heroSlideshowTimer) {
+      window.clearInterval(heroSlideshowTimer);
+      heroSlideshowTimer = null;
+    }
+
+    if (!heroImageLayerPrimary || !heroImageLayerSecondary) {
+      return;
+    }
+
+    function setLayerImage(layer, image) {
+      layer.style.backgroundImage = "url('" + image.replace(/'/g, "%27") + "')";
+    }
+
+    if (page.hero) {
+      const slideshowImages = [];
+      pageHeroRows.forEach(function (row) {
+        const image = (row.image || "").trim();
+        if (image && slideshowImages.indexOf(image) === -1) {
+          slideshowImages.push(image);
+        }
+      });
+
+      const images = slideshowImages.length ? slideshowImages : (heroImage ? [heroImage] : []);
+      if (images.length) {
+        let currentIndex = 0;
+        let activeLayer = heroImageLayerPrimary;
+        let inactiveLayer = heroImageLayerSecondary;
+        setLayerImage(activeLayer, images[currentIndex]);
+        activeLayer.classList.add("is-active");
+        inactiveLayer.classList.remove("is-active");
+        if (images.length > 1) {
+          heroSlideshowTimer = window.setInterval(function () {
+            currentIndex = (currentIndex + 1) % images.length;
+            setLayerImage(inactiveLayer, images[currentIndex]);
+            inactiveLayer.classList.add("is-active");
+            activeLayer.classList.remove("is-active");
+            const previousLayer = activeLayer;
+            activeLayer = inactiveLayer;
+            inactiveLayer = previousLayer;
+          }, 3000);
+        }
+      }
+    } else if (heroImage) {
+      setLayerImage(heroImageLayerPrimary, heroImage);
+      heroImageLayerPrimary.classList.add("is-active");
+      heroImageLayerSecondary.classList.remove("is-active");
     }
     if (!page.hero) {
       return;
