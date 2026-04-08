@@ -426,6 +426,8 @@ code {
 }
 
 .hero__overlay--subpage {
+  align-items: flex-start;
+  justify-content: center;
   padding:
     calc(var(--header-height) + clamp(10px, 1.6svh, 20px))
     clamp(16px, 3vw, 40px)
@@ -434,6 +436,8 @@ code {
 
 .hero__content--subpage {
   max-width: none;
+  width: 100%;
+  text-align: center;
 }
 
 .hero__subpage-title {
