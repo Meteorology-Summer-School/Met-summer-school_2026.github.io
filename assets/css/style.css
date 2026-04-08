@@ -311,7 +311,9 @@ code {
   max-width: none;
   margin: calc(-1 * var(--header-height)) 0 0;
   padding-top: 0;
-  min-height: clamp(360px, calc(100svh - 84px), 760px);
+  height: max(360px, calc(100dvh - var(--banner-height)));
+  min-height: max(360px, calc(100svh - var(--banner-height)));
+  max-height: calc(100dvh - var(--banner-height));
   overflow: hidden;
   border-radius: 0;
   background: #dbe8f4;
@@ -903,7 +905,9 @@ code {
   }
 
   .hero {
-    min-height: clamp(340px, calc(100svh - 88px), 640px);
+    height: max(340px, calc(100dvh - var(--banner-height)));
+    min-height: max(340px, calc(100svh - var(--banner-height)));
+    max-height: calc(100dvh - var(--banner-height));
   }
 
   .hero__meta,
@@ -1108,7 +1112,9 @@ code {
   }
 
   .hero {
-    min-height: clamp(300px, calc(100svh - 92px), 540px);
+    height: max(300px, calc(100dvh - var(--banner-height)));
+    min-height: max(300px, calc(100svh - var(--banner-height)));
+    max-height: calc(100dvh - var(--banner-height));
   }
 
   .hero__content h1,
