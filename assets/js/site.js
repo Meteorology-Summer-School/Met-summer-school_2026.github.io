@@ -14,7 +14,6 @@
     general: { id: "general", title: "一般講演", file: "general.html", content: "content/general.md", navRoot: "overview", lead: "一般講演の募集方針と提出スケジュールを掲載します。" },
     participants: { id: "participants", title: "参加者一覧", file: "participants.html", content: "content/participants.md", navRoot: "overview", lead: "参加予定者や実行委員会の一覧を掲載します。" },
     registration: { id: "registration", title: "参加申し込み", file: "registration.html", content: "content/registration.md", navRoot: "overview", lead: "参加登録、発表申込、支払いなどの案内を掲載します。" },
-    observation: { id: "observation", title: "観測企画", file: "observation.html", content: "content/observation.md", navRoot: "overview", lead: "観測企画や屋外企画の案内を掲載します。" },
     sponsors: { id: "sponsors", title: "協賛", file: "sponsors.html", content: "content/sponsors.md", navRoot: "sponsors", lead: "協賛募集やご支援の案内を掲載します。" },
     faq: { id: "faq", title: "FAQ", file: "faq.html", content: "content/faq.md", navRoot: "faq", lead: "よくある質問をまとめています。" },
     links: { id: "links", title: "リンク", file: "links.html", content: "content/links.md", navRoot: "links", lead: "関連サイトや歴代の気象夏の学校ページへのリンクです。" },
@@ -33,8 +32,7 @@
         { id: "invited", label: "招待講演", href: "invited.html" },
         { id: "general", label: "一般講演", href: "general.html" },
         { id: "participants", label: "参加者一覧", href: "participants.html" },
-        { id: "registration", label: "参加申し込み", href: "registration.html" },
-        { id: "observation", label: "観測企画", href: "observation.html" }
+        { id: "registration", label: "参加申し込み", href: "registration.html" }
       ]
     },
     { id: "sponsors", label: "協賛", href: "sponsors.html" },
@@ -77,15 +75,6 @@
         { key: "name", label: "氏名" },
         { key: "affiliation", label: "所属" },
         { key: "topic", label: "担当・研究分野" }
-      ]
-    },
-    observation: {
-      kind: "table",
-      source: "data/observation_programs.csv",
-      columns: [
-        { key: "time", label: "時間帯" },
-        { key: "activity", label: "企画" },
-        { key: "note", label: "備考" }
       ]
     },
     sponsors: { kind: "cards", source: "data/sponsors.csv" },
@@ -395,8 +384,7 @@
           { id: "invited", label: pages.invited.navLabel || pages.invited.title, href: "invited.html" },
           { id: "general", label: pages.general.navLabel || pages.general.title, href: "general.html" },
           { id: "participants", label: pages.participants.navLabel || pages.participants.title, href: "participants.html" },
-          { id: "registration", label: pages.registration.navLabel || pages.registration.title, href: "registration.html" },
-          { id: "observation", label: pages.observation.navLabel || pages.observation.title, href: "observation.html" }
+          { id: "registration", label: pages.registration.navLabel || pages.registration.title, href: "registration.html" }
         ]
       },
       { id: "sponsors", label: pages.sponsors.navLabel || pages.sponsors.title, href: "sponsors.html" },
