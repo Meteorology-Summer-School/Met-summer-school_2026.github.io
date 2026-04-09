@@ -1099,6 +1099,10 @@ code {
     border-radius: 999px;
   }
 
+  .nav-toggle[aria-expanded="true"] {
+    color: #000000;
+  }
+
   .nav-toggle__label {
     display: none;
   }
