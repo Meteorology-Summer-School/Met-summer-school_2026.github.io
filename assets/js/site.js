@@ -44,6 +44,7 @@
   const PLACEHOLDERS = {
     updates: { kind: "timeline", source: "data/updates.csv" },
     overview: { kind: "overview", source: "data/overview.csv" },
+    "access-map": { kind: "map", source: "data/access_map.csv" },
     "access-venue": {
       kind: "table",
       source: "data/access_venue.csv",
@@ -463,10 +464,20 @@
     }).join("") + "</ul>";
   }
 
+  function renderLinkedValue(value, link, linkLabel) {
+    const content = renderInline(value || "");
+    if (!link) {
+      return "<strong>" + content + "</strong>";
+    }
+    return '<strong><a href="' + escapeHtml(link) + '" target="_blank" rel="noopener noreferrer">' +
+      (linkLabel ? renderInline(linkLabel) : content) +
+      "</a></strong>";
+  }
+
   function renderOverviewTable(rows) {
     return '<table class="info-table"><tbody>' + rows.map(function (row) {
       const note = row.note ? '<div class="table-note">' + renderInline(row.note) + "</div>" : "";
-      return "<tr><th>" + renderInline(row.item || "") + "</th><td><strong>" + renderInline(row.value || "") + "</strong>" + note + "</td></tr>";
+      return "<tr><th>" + renderInline(row.item || "") + "</th><td>" + renderLinkedValue(row.value || "", row.link || "", row.link_label || "") + note + "</td></tr>";
     }).join("") + "</tbody></table>";
   }
 
@@ -500,6 +511,17 @@
       const link = row.link ? '<p class="info-card__link"><a href="' + escapeHtml(row.link) + '">' + renderInline(row.link_label || "詳細を見る") + "</a></p>" : "";
       return '<section class="info-card">' + image + '<div class="info-card__body">' + category + "<h3>" + renderInline(row.title || "") + "</h3>" + subtitle + text + link + "</div></section>";
     }).join("") + "</div>";
+  }
+
+  function renderMapBlock(rows) {
+    const settings = csvRowsToMap(rows);
+    const iframe = settings.embed_url
+      ? '<div class="map-embed"><iframe src="' + escapeHtml(settings.embed_url) + '" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="' + escapeHtml(settings.title || "地図") + '"></iframe></div>'
+      : "";
+    const link = settings.link_url
+      ? '<p class="map-embed__link"><a href="' + escapeHtml(settings.link_url) + '" target="_blank" rel="noopener noreferrer">' + renderInline(settings.link_label || "Google Mapsで見る") + "</a></p>"
+      : "";
+    return '<section class="map-block">' + iframe + link + "</section>";
   }
 
   function renderInvitedTalks(rows) {
@@ -574,6 +596,9 @@
     }
     if (config.kind === "overview") {
       return renderOverviewTable(rows);
+    }
+    if (config.kind === "map") {
+      return renderMapBlock(rows);
     }
     if (config.kind === "table") {
       return renderDataTable(rows, config);
@@ -743,7 +768,7 @@
     }
 
     target.innerHTML = rows.slice(0, 3).map(function (row) {
-      return '<div class="hero__meta-item"><span>' + renderInline(row.item || "") + "</span><strong>" + renderInline(row.value || "") + "</strong></div>";
+      return '<div class="hero__meta-item"><span>' + renderInline(row.item || "") + "</span>" + renderLinkedValue(row.value || "", row.link || "", row.link_label || "") + "</div>";
     }).join("");
   }
 

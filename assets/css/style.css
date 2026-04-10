@@ -491,6 +491,12 @@ code {
   margin-top: 6px;
 }
 
+.hero__meta-item strong a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+}
+
 .content-wrap {
   margin-top: 24px;
 }
@@ -688,6 +694,29 @@ code {
   overflow-x: auto;
   border: 1px solid rgba(143, 178, 203, 0.4);
   border-radius: var(--radius-md);
+}
+
+.map-block {
+  margin: 18px 0 28px;
+}
+
+.map-embed {
+  border: 1px solid rgba(143, 178, 203, 0.45);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 16px 30px rgba(24, 52, 76, 0.08);
+}
+
+.map-embed iframe {
+  display: block;
+  width: 100%;
+  min-height: 460px;
+  border: 0;
+}
+
+.map-embed__link {
+  margin: 12px 0 0;
 }
 
 .data-table--compact th,
