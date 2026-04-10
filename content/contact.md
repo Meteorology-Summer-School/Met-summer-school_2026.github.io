@@ -2,7 +2,10 @@
 
 | 項目 | 内容 |
 | --- | --- |
-| 実行委員会メール | `example@example.com` |
+| 担当 | 第38回日本気象学会夏期特別セミナー実行委員会 |
+| 実行委員会メール | 準備中 |
+| Web サイト | https://meteorology-summer-school.github.io/2026/ |
+| X (Twitter) | https://x.com/MetSs_2026 |
 | 件名の例 | `【気象夏の学校 2026】お問い合わせ` |
 | 対応内容 | 参加申込、発表、会場、協賛、サイト更新など |
 
