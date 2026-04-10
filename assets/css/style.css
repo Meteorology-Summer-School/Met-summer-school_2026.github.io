@@ -23,6 +23,7 @@
 }
 
 html {
+  font-size: 120%;
   scroll-behavior: smooth;
 }
 
@@ -529,6 +530,7 @@ code {
 .page-content li,
 .page-content th,
 .page-content td {
+  font-size: 1.03rem;
   word-break: auto-phrase;
   overflow-wrap: anywhere;
 }
@@ -1229,7 +1231,7 @@ code {
   .page-content,
   .timeline-list__date,
   .site-footer__inner {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .content-card {
