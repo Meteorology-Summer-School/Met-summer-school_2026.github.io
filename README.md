@@ -145,6 +145,18 @@ category,title,subtitle,text,image,link,link_label
 協賛,企業名,紹介文,掲載したい説明文,assets/images/sample-logo.png,https://example.com,企業サイト
 ```
 
+### 5. 一番上の固定バナーを編集する
+
+`data/site_banner.csv` を編集します。  
+表示しない場合は `message` を空欄にしてください。
+
+```csv
+key,value
+message,最新のお知らせはこちらをご確認ください
+link,https://example.com
+link_label,詳細
+```
+
 ## 注意
 
 - ローカルで `file://` から直接開くと、ブラウザの制限で Markdown や CSV の読み込みに失敗することがあります。

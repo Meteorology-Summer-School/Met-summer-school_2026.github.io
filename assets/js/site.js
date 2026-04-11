@@ -693,7 +693,7 @@
 
     const message = '<p class="site-banner__message">' + renderInline(settings.message) + "</p>";
     const cta = settings.link
-      ? '<a class="site-banner__button" href="' + escapeHtml(settings.link) + '">' + escapeHtml(settings.link_label || "詳細") + "</a>"
+      ? '<a class="site-banner__button" href="' + escapeHtml(settings.link) + '"' + buildLinkAttrs(settings.link) + ">" + escapeHtml(settings.link_label || "詳細") + "</a>"
       : "";
 
     return '<div class="site-banner"><div class="site-banner__inner">' + message + cta + "</div></div>";
