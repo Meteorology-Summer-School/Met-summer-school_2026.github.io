@@ -528,7 +528,10 @@
 
   function renderCards(rows) {
     return '<div class="card-grid">' + rows.map(function (row) {
-      const image = row.image ? '<img class="info-card__image" src="' + escapeHtml(row.image) + '" alt="' + escapeHtml(row.title || "") + '">' : "";
+      const imageInner = row.image ? '<img class="info-card__image" src="' + escapeHtml(row.image) + '" alt="' + escapeHtml(row.title || "") + '">' : "";
+      const image = row.link && imageInner
+        ? '<a class="info-card__image-link" href="' + escapeHtml(row.link) + '"' + buildLinkAttrs(row.link) + ">" + imageInner + "</a>"
+        : imageInner;
       const category = row.category ? '<p class="info-card__eyebrow">' + renderInline(row.category) + "</p>" : "";
       const subtitle = row.subtitle ? '<p class="info-card__subtitle">' + renderInline(row.subtitle) + "</p>" : "";
       const text = row.text ? '<div class="info-card__text">' + renderTextBlock(row.text) + "</div>" : "";
