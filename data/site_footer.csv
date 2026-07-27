@@ -2,3 +2,7 @@ key,value
 owner_text,第38回日本気象学会夏期特別セミナー実行委員会
 note_text,このサイトは GitHub Pages の静的配信のみで動作します。
 note_link,https://github.com/Meteorology-Summer-School/2026
+sponsor_label,協賛企業
+sponsor_image,assets/images/WM_logo_A_colour.jpg
+sponsor_alt,株式会社ウェザーマップ
+sponsor_link,https://www.weathermap.co.jp/

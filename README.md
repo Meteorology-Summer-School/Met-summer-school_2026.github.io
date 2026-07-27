@@ -80,7 +80,8 @@ Jekyll、Gemfile、外部ライブラリ、ビルド手順は使っていませ�
 ### 協賛 `sponsors.html`
 
 - 本文: `content/sponsors.md`
-- 募集要項PDF設定: `data/sponsors_pdf.csv`
+- 協賛企業情報: `data/sponsors.csv`
+- 全ページ共通バナー: `data/site_footer.csv`
 
 ### FAQ `faq.html`
 
@@ -136,19 +137,9 @@ day,time,program,details
 1日目（9月4日・金）,13:00-14:00,受付,詳細は準備中
 ```
 
-### 4. 協賛情報を追加する
+### 4. 協賛企業を追加する
 
-`content/sponsors.md` を編集して、協賛案内文とフォームリンクを更新します。募集要項PDFの設定は `data/sponsors_pdf.csv`、ホームページ側の短い案内は `content/home.md`、上部バナーは `data/site_banner.csv` を編集します。
-
-```md
-## 協賛募集について
-
-本文をここに記載します。
-
-### 募集要項
-
-::sponsor-pdf::
-```
+協賛ページの本文は `content/sponsors.md`、協賛企業情報は `data/sponsors.csv` を編集します。全ページ下部のバナー画像とリンク先は `data/site_footer.csv` で管理します。
 
 ### 5. 一番上の固定バナーを編集する
 

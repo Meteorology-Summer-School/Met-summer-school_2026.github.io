@@ -1015,6 +1015,36 @@ code {
   padding: 0 0 34px;
 }
 
+.site-footer__sponsor {
+  width: min(calc(100% - 32px), var(--content-width));
+  margin: 0 auto 18px;
+  padding: clamp(18px, 2.5vw, 28px);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(143, 178, 203, 0.4);
+  border-radius: 20px;
+}
+
+.site-footer__sponsor-label {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.site-footer__sponsor-link {
+  display: block;
+  width: min(100%, 897px);
+  margin: 0 auto;
+  padding: clamp(24px, 7.8vw, 70px) 0;
+}
+
+.site-footer__sponsor-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .site-footer__inner {
   display: flex;
   justify-content: space-between;
@@ -1045,6 +1075,7 @@ code {
   .site-banner__inner,
   .site-header__inner,
   .content-wrap,
+  .site-footer__sponsor,
   .site-footer__inner {
     width: min(calc(100% - 24px), var(--content-width));
   }
@@ -1249,6 +1280,7 @@ code {
   .site-banner__inner,
   .site-header__inner,
   .content-wrap,
+  .site-footer__sponsor,
   .site-footer__inner {
     width: min(calc(100% - 20px), var(--content-width));
   }
@@ -1307,6 +1339,7 @@ code {
   .site-banner__inner,
   .site-header__inner,
   .content-wrap,
+  .site-footer__sponsor,
   .site-footer__inner {
     width: min(calc(100% - 16px), var(--content-width));
   }
