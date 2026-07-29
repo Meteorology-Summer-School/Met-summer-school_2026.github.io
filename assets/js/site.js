@@ -14,7 +14,7 @@
     general: { id: "general", title: "一般講演", file: "general.html", content: "content/general.md", navRoot: "overview", lead: "一般講演の募集方針と提出スケジュールを掲載します。" },
     participants: { id: "participants", title: "参加者一覧", file: "participants.html", content: "content/participants.md", navRoot: "overview", lead: "参加予定者や実行委員会の一覧を掲載します。" },
     registration: { id: "registration", title: "参加申し込み", file: "registration.html", content: "content/registration.md", navRoot: "overview", lead: "参加登録、発表申込、支払いなどの案内を掲載します。" },
-    sponsors: { id: "sponsors", title: "協賛", file: "sponsors.html", content: "content/sponsors.md", navRoot: "sponsors", lead: "ご協賛いただいた企業をご紹介します。" },
+    sponsors: { id: "sponsors", title: "協賛", file: "sponsors.html", content: "content/sponsors.md", navRoot: "sponsors", lead: "ご協賛いただいた個人・法人・団体をご紹介します。" },
     faq: { id: "faq", title: "FAQ", file: "faq.html", content: "content/faq.md", navRoot: "faq", lead: "よくある質問をまとめています。" },
     links: { id: "links", title: "リンク", file: "links.html", content: "content/links.md", navRoot: "links", lead: "関連サイトや歴代の気象夏の学校ページへのリンクです。" },
     contact: { id: "contact", title: "お問い合わせ", file: "contact.html", content: "content/contact.md", navRoot: "contact", lead: "実行委員会への連絡先を掲載します。" }
