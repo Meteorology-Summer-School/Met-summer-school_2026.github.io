@@ -45,6 +45,7 @@
     updates: { kind: "timeline", source: "data/updates.csv" },
     overview: { kind: "overview", source: "data/overview.csv" },
     "access-map": { kind: "map", source: "data/access_map.csv" },
+    "access-mine-map": { kind: "map", source: "data/access_mine_map.csv" },
     "access-venue": {
       kind: "table",
       source: "data/access_venue.csv",
