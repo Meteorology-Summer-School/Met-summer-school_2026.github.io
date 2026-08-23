@@ -145,15 +145,15 @@
 車でお越しの方も、1日目は受付会場の大子町文化福祉会館「まいん」へ直接お越しください。大子町営研修センターではありませんので、お間違えのないようご注意ください。
 
 ### 地図
-- embed_url
-https://www.google.com/maps?q=%E5%A4%A7%E5%AD%90%E7%94%BA%E7%A0%94%E4%BF%AE%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%20%E3%80%92319-3521%20%E8%8C%A8%E5%9F%8E%E7%9C%8C%E4%B9%85%E6%85%88%E9%83%A1%E5%A4%A7%E5%AD%90%E7%94%BA%E5%8C%97%E7%94%B0%E6%B0%97662&z=15&output=embed
 
-- link_url
-https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E5%AD%90%E7%94%BA%E7%A0%94%E4%BF%AE%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%20%E8%8C%A8%E5%9F%8E%E7%9C%8C%E4%B9%85%E6%85%88%E9%83%A1%E5%A4%A7%E5%AD%90%E7%94%BA%E5%8C%97%E7%94%B0%E6%B0%97662
+地図は `data/access_map.csv` で管理する。1行につき1地点とし、次の列を使用する。
 
+- `title`: 地図の上に表示する地点名
+- `embed_url`: ページ内に埋め込むGoogle MapsのURL
+- `link_url`: Google Mapsを別画面で開くURL
+- `link_label`: 外部リンクに表示する文言
 
-- Google Maps に大子町営研修センターのピンを立てた状態で掲載する
-- Google Maps の外部リンクも併記する
+地図を追加する場合は、`data/access_map.csv` の末尾に行を追加する。HTMLやJavaScriptの変更は不要。
 
 ### 電車でお越しの方へ
 

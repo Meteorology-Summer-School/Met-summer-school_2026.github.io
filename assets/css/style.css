@@ -723,8 +723,17 @@ code {
   border-radius: var(--radius-md);
 }
 
+.map-list {
+  display: grid;
+  gap: clamp(28px, 4vw, 48px);
+}
+
 .map-block {
-  margin: 18px 0 28px;
+  margin: 0;
+}
+
+.map-block h3 {
+  margin-top: 0;
 }
 
 .map-embed {

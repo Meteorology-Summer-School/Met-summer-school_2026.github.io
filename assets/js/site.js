@@ -45,7 +45,6 @@
     updates: { kind: "timeline", source: "data/updates.csv" },
     overview: { kind: "overview", source: "data/overview.csv" },
     "access-map": { kind: "map", source: "data/access_map.csv" },
-    "access-mine-map": { kind: "map", source: "data/access_mine_map.csv" },
     "access-venue": {
       kind: "table",
       source: "data/access_venue.csv",
@@ -576,14 +575,24 @@
   }
 
   function renderMapBlock(rows) {
-    const settings = csvRowsToMap(rows);
-    const iframe = settings.embed_url
-      ? '<div class="map-embed"><iframe src="' + escapeHtml(settings.embed_url) + '" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="' + escapeHtml(settings.title || "地図") + '"></iframe></div>'
-      : "";
-    const link = settings.link_url
-      ? '<p class="map-embed__link"><a href="' + escapeHtml(settings.link_url) + '"' + buildLinkAttrs(settings.link_url) + ">" + renderInline(settings.link_label || "Google Mapsで見る") + "</a></p>"
-      : "";
-    return '<section class="map-block">' + iframe + link + "</section>";
+    const maps = rows.length && Object.prototype.hasOwnProperty.call(rows[0], "key")
+      ? [csvRowsToMap(rows)]
+      : rows;
+
+    const blocks = maps.map(function (settings) {
+      const title = settings.title
+        ? "<h3>" + renderInline(settings.title) + "</h3>"
+        : "";
+      const iframe = settings.embed_url
+        ? '<div class="map-embed"><iframe src="' + escapeHtml(settings.embed_url) + '" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="' + escapeHtml(settings.title || "地図") + '"></iframe></div>'
+        : "";
+      const link = settings.link_url
+        ? '<p class="map-embed__link"><a href="' + escapeHtml(settings.link_url) + '"' + buildLinkAttrs(settings.link_url) + ">" + renderInline(settings.link_label || "Google Mapsで見る") + "</a></p>"
+        : "";
+      return '<section class="map-block">' + title + iframe + link + "</section>";
+    }).join("");
+
+    return '<div class="map-list">' + blocks + "</div>";
   }
 
   function renderInvitedTalks(rows) {

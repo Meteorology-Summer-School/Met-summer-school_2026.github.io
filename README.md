@@ -55,7 +55,7 @@ Jekyll、Gemfile、外部ライブラリ、ビルド手順は使っていませ�
 - 本文: `content/access.md`
 - 会場情報の表: `data/access_venue.csv`
 - 宿泊情報の表: `data/access_lodging.csv`
-- Google Maps 埋め込み: `data/access_map.csv`
+- Google Maps 埋め込み: `data/access_map.csv`（1行につき1地点。行を追加すると地図も追加されます）
 
 ### 招待講演 `invited.html`
 
